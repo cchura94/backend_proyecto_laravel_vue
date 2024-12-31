@@ -23,3 +23,4 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/api/v1/auth/profile
 Accept: application/json
 Authorization: Bearer 5|EpKElzrthbdgdHePsrbcMjZ9Zjx9HrMbd6GrHmG67e137f20
+

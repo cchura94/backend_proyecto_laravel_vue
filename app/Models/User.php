@@ -53,4 +53,12 @@ class User extends Authenticatable
         return $this->hasOne(Persona::class);
     } 
 
+    public function tareas() {
+        return $this->belongsToMany(Tarea::class);
+    }
+
+    public function proyectos() {
+        return $this->hasMany(Proyecto::class, "jefe_proyecto");
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,8 @@ class UsuarioController extends Controller
     public function index()
     {
         // listar
-        $usuarios = DB::select("select * from users");
+        // $usuarios = DB::select("select * from users");
+        $usuarios = User::get();
 
         return response()->json($usuarios, 200);
     }
@@ -37,7 +39,8 @@ class UsuarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+        return response()->json($usuario, 200);
     }
 
     /**

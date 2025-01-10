@@ -25,11 +25,22 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "name" => "required|max:30|min:2",
+            "email" => "required|email|unique:users",
+            "password" => "required"
+        ]);
+
         $nombre = $request->name;
         $correo = $request->email;
         $clave = bcrypt($request->password);
         // guardar
-        DB::insert("insert into users (name, email, password) values (?, ?, ?)", [$nombre, $correo, $clave]);
+        // DB::insert("insert into users (name, email, password) values (?, ?, ?)", [$nombre, $correo, $clave]);
+        $usuario = new User();
+        $usuario->name = $nombre;
+        $usuario->email = $correo;
+        $usuario->password = $clave;
+        $usuario->save();
 
         return response()->json(["mensaje" => "Usuario Registrado"], 201);
     }
@@ -48,7 +59,28 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+
+        $request->validate([
+            "name" => "required|max:30|min:2",
+            "email" => "required|email|unique:users,email,".$id,
+            "password" => "required"
+        ]);
+
+        $nombre = $request->name;
+        $correo = $request->email;
+
+        // modifica
+    
+        $usuario->name = $nombre;
+        $usuario->email = $correo;
+        if(isset($request->password)){
+            $usuario->password = bcrypt($request->password);
+        }
+        $usuario->update();
+
+        return response()->json(["mensaje" => "Usuario Actualizado"], 201);
+
     }
 
     /**
@@ -56,6 +88,10 @@ class UsuarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+        $usuario->delete();
+        
+        return response()->json(["mensaje" => "Usuario Eliminado"], 200);
+
     }
 }

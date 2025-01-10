@@ -10,6 +10,7 @@ Accept: application/json
     "email": "simon@mail.com",
     "password": "simon54321"
 }
+
 ### Mostrar usuario
 GET http://127.0.0.1:8000/api/user/2
 

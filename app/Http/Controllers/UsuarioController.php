@@ -15,7 +15,7 @@ class UsuarioController extends Controller
     {
         // listar
         // $usuarios = DB::select("select * from users");
-        $usuarios = User::get();
+        $usuarios = User::with('persona')->get();
 
         return response()->json($usuarios, 200);
     }
@@ -64,7 +64,7 @@ class UsuarioController extends Controller
         $request->validate([
             "name" => "required|max:30|min:2",
             "email" => "required|email|unique:users,email,".$id,
-            "password" => "required"
+            "password" => "string"
         ]);
 
         $nombre = $request->name;

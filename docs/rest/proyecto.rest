@@ -1,0 +1,43 @@
+GET http://127.0.0.1:8000/api/proyecto?page=1
+
+### guardar Proyecto
+POST http://127.0.0.1:8000/api/proyecto
+Content-Type: application/json
+Accept: application/json
+
+{
+    "nombre": "PROYECTO PRUEBA 1",
+    "descripcion": "esta es la descripcion del proyecto 1",
+    "fecha_inicio": "15-01-2025",
+    "fecha_fin": "15-02-2025",
+    "jefe_proyecto": 1,
+    "estado": "activo"
+}
+
+### guardar Proyecto 2
+POST http://127.0.0.1:8000/api/proyecto
+Content-Type: application/json
+Accept: application/json
+
+{
+    "nombre": "PROYECTO PRUEBA 2",
+    "descripcion": "esta es la descripcion del proyecto 2",
+    "fecha_inicio": "31-01-2025",
+    "fecha_fin": "20-02-2025",
+    "jefe_proyecto": 10,
+    "estado": "activo"
+}
+
+### guardar Proyecto 2
+POST http://127.0.0.1:8000/api/proyecto
+Content-Type: application/json
+Accept: application/json
+
+{
+    "nombre": "PROYECTO PRUEBA 3",
+    "descripcion": "esta es la descripcion del proyecto 3",
+    "fecha_inicio": "14-02-2025",
+    "fecha_fin": "20-04-2025",
+    "jefe_proyecto": 2,
+    "estado": "activo"
+}

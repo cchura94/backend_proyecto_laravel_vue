@@ -11,11 +11,19 @@ class ProyectoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $proyectos = Proyecto::with(['user', 'tareas', 'recursos', 'informes']);
+        $limit = isset($request->limit)?$request->limit:10;
+        $buscar = $request->buscar;
         
-        $proyectos = $proyectos->get();
+        if($buscar){
+            
+            $proyectos = Proyecto::where("nombre", "like", "%$buscar%")->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])->paginate($limit);
+            
+        }else{
+
+            $proyectos = Proyecto::with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])->paginate($limit);
+        }
         return response()->json($proyectos, 200);
 
     }
@@ -40,7 +48,7 @@ class ProyectoController extends Controller
         $proyecto->fecha_inicio = $request->fecha_inicio;
         $proyecto->fecha_fin = $request->fecha_fin;
         $proyecto->jefe_proyecto = $request->jefe_proyecto;
-        // $proyecto->nombre = $request->nombre;
+        $proyecto->estado = $request->estado;
         // $proyecto->nombre = $request->nombre;
         $proyecto->save();
 
@@ -52,7 +60,9 @@ class ProyectoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $proyecto = Proyecto::findOrFail($id);
+
+        return response()->json($proyecto, 200);
     }
 
     /**
@@ -60,7 +70,26 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            "nombre" => "required|string|max:255",
+            "descripcion" => "nullable|string",
+            "fecha_inicio" => "required|date",
+            "fecha_fin" => "required|date|after_or_equal:fecha_inicio",
+            'jefe_proyecto' => "required|exists:users,id"
+            
+        ]);
+        
+        $proyecto = Proyecto::findOrFail($id);
+        $proyecto->nombre = $request->nombre;
+        $proyecto->descripcion = $request->descripcion;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_fin = $request->fecha_fin;
+        $proyecto->jefe_proyecto = $request->jefe_proyecto;
+        $proyecto->estado = $request->estado;
+        // $proyecto->nombre = $request->nombre;
+        $proyecto->update();
+
+        return response()->json(["mensaje" => "Proyecto Actualizado"]);
     }
 
     /**
@@ -68,6 +97,8 @@ class ProyectoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $proyecto = Proyecto::findOrFail($id);
+        $proyecto->delete();
+        return response()->json(["mensaje" => "Proyecto Eliminado"]);
     }
 }

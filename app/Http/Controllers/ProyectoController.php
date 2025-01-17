@@ -18,11 +18,16 @@ class ProyectoController extends Controller
         
         if($buscar){
             
-            $proyectos = Proyecto::where("nombre", "like", "%$buscar%")->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])->paginate($limit);
+            $proyectos = Proyecto::where("nombre", "like", "%$buscar%")
+                                    ->orderBy('id', 'desc')
+                                    ->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+                                    ->paginate($limit);
             
         }else{
 
-            $proyectos = Proyecto::with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])->paginate($limit);
+            $proyectos = Proyecto::orderBy('id', 'desc')
+                                    ->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+                                    ->paginate($limit);
         }
         return response()->json($proyectos, 200);
 
@@ -60,7 +65,8 @@ class ProyectoController extends Controller
      */
     public function show(string $id)
     {
-        $proyecto = Proyecto::findOrFail($id);
+        $proyecto = Proyecto::with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+                                ->findOrFail($id);
 
         return response()->json($proyecto, 200);
     }

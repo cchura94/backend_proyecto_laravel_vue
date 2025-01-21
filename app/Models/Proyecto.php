@@ -21,4 +21,8 @@ class Proyecto extends Model
     public function informes() {
         return $this->hasMany(Informe::class);
     }
+
+    public function users() {
+        return $this->hasMany(User::class);
+    }
 }

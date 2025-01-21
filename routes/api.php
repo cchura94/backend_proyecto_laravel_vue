@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\TareaController;
 use App\Http\Controllers\UsuarioController;
 
 Route::get('/user', function (Request $request) {
@@ -28,3 +29,4 @@ Route::prefix('/v1/auth')->group(function(){
 Route::apiResource("user", UsuarioController::class);
 Route::apiResource("persona", PersonaController::class);
 Route::apiResource("proyecto", ProyectoController::class);
+Route::apiResource("tarea", TareaController::class);

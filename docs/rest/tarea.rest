@@ -1,0 +1,12 @@
+POST http://127.0.0.1:8000/api/tarea
+Accept: application/json
+Content-Type: application/json
+
+{
+    "nombre": "Tarea 1",
+    "fecha_inicio": "21-01-2025",
+    "fecha_fin": "31-01-2025",
+    "estado": "pendiente",
+    "prioridad": "media",
+    "proyecto_id": 1
+}

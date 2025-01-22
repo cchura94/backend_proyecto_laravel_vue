@@ -107,4 +107,15 @@ class ProyectoController extends Controller
         $proyecto->delete();
         return response()->json(["mensaje" => "Proyecto Eliminado"]);
     }
+
+    public function asignarRecurso($id, Request $request){
+        
+        $proyecto = Proyecto::find($id);
+
+        // return $request;
+        $proyecto->recursos()->attach($request->recurso_id, ["cantidad_asignada" => $request->cantidad_asignada, "responsable_id" => $request->responsable_id, "fecha_asignacion" => date("Y-m-d H:i:s")  ]);
+
+        return response()->json(["mensaje" => "recurso asignado"]);
+
+    }
 }

@@ -15,14 +15,16 @@ class Proyecto extends Model
     }
 
     public function recursos() {
-        return $this->belongsToMany(Recurso::class);
+        return $this->belongsToMany(Recurso::class)->withPivot(["cantidad_asignada", "fecha_asignacion", "responsable_id"]);
     }
 
     public function informes() {
         return $this->hasMany(Informe::class);
     }
 
+    /*
     public function users() {
         return $this->hasMany(User::class);
     }
+    */
 }

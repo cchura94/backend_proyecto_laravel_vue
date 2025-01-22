@@ -1,0 +1,14 @@
+GET http://127.0.0.1:8000/api/recurso
+
+###
+POST http://127.0.0.1:8000/api/recurso
+Accept: application/json
+Content-Type: application/json
+
+{
+    "nombre": "Recurso DOS",
+    "tipo": "material",
+    "stock_disponible": 55,
+    "precio": 120,
+    "unidad": "cajas"
+}

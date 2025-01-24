@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Informe;
 use App\Models\Persona;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
@@ -117,5 +118,28 @@ class ProyectoController extends Controller
 
         return response()->json(["mensaje" => "recurso asignado"]);
 
+    }
+
+    public function asignarInforme($id, Request $request){
+
+        $direccion_archivo = "";
+        if($file = $request->file('archivo')){
+            $direccion_archivo = time() . "-" . $file->getClientOriginalName();
+            $file->move("archivos/", $direccion_archivo);
+
+            $direccion_archivo = "archivos/". $direccion_archivo;
+            
+            $informe = new Informe();
+            $informe->proyecto_id = $id;
+            $informe->fecha = date("Y-m-d H:i:s");
+            $informe->descripcion = $request->descripcion;
+            $informe->archivo = $direccion_archivo;
+            $informe->save();
+
+            return response()->json(["mensaje" => "Aechivo Registrado"], 201);
+        }else{
+            return response()->json(["mensaje" => "Es obligatorio el archivo"], 422);
+
+        }
     }
 }

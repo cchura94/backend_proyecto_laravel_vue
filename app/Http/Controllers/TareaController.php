@@ -48,7 +48,8 @@ class TareaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tarea = Tarea::with(['users', 'proyecto'])->findOrFail($id);
+        return response()->json($tarea, 200);
     }
 
     /**
@@ -65,5 +66,12 @@ class TareaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function asignarUsuario($id, Request $request){
+        $tarea = Tarea::find($id);
+        $tarea->users()->attach($request->user_id);
+
+        return response()->json(["mensaje" => "Usuario Asignado a la Tarea"], 201);
     }
 }

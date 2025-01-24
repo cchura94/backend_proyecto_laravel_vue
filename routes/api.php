@@ -26,6 +26,9 @@ Route::prefix('/v1/auth')->group(function(){
 
 });
 
+Route::post("proyecto/{id}/asignar-informe", [ProyectoController::class, "asignarInforme"]);
+
+Route::post("tarea/{id}/asignar-usuario", [TareaController::class, "asignarUsuario"]);
 Route::post("proyecto/{id}/asignar-recurso", [ProyectoController::class, "asignarRecurso"]);
 // CRUD de Usuarios
 Route::apiResource("user", UsuarioController::class);

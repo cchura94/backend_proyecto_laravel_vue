@@ -15,7 +15,7 @@ class UsuarioController extends Controller
     {
         // listar
         // $usuarios = DB::select("select * from users");
-        $usuarios = User::with('persona')->get();
+        $usuarios = User::with(['persona', 'proyectos', 'tareas'])->get();
 
         return response()->json($usuarios, 200);
     }

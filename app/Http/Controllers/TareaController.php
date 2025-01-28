@@ -74,4 +74,11 @@ class TareaController extends Controller
 
         return response()->json(["mensaje" => "Usuario Asignado a la Tarea"], 201);
     }
+
+    public function actualizarEstado($id, Request $request){
+        $tarea = Tarea::findOrFail($id);
+        $tarea->estado = $request->estado;
+        $tarea->update();
+        return response()->json(["message" => "Tarea Actualizada"], 200);
+    }
 }

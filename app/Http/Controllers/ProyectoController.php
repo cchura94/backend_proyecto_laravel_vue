@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProyectosExport;
 use App\Models\Informe;
 use App\Models\Persona;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ProyectoController extends Controller
 {
@@ -21,13 +25,13 @@ class ProyectoController extends Controller
             
             $proyectos = Proyecto::where("nombre", "like", "%$buscar%")
                                     ->orderBy('id', 'desc')
-                                    ->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+                                    ->with(['jefe_proyecto_data', 'tareas', 'recursos', 'informes'])
                                     ->paginate($limit);
             
         }else{
 
             $proyectos = Proyecto::orderBy('id', 'desc')
-                                    ->with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+                                    ->with(['jefe_proyecto_data', 'tareas', 'recursos', 'informes'])
                                     ->paginate($limit);
         }
         return response()->json($proyectos, 200);
@@ -66,7 +70,7 @@ class ProyectoController extends Controller
      */
     public function show(string $id)
     {
-        $proyecto = Proyecto::with(['jefe_proyecto', 'tareas', 'recursos', 'informes'])
+        $proyecto = Proyecto::with(['jefe_proyecto_data', 'tareas', 'recursos', 'informes'])
                                 ->findOrFail($id);
 
         return response()->json($proyecto, 200);
@@ -141,5 +145,26 @@ class ProyectoController extends Controller
             return response()->json(["mensaje" => "Es obligatorio el archivo"], 422);
 
         }
+    }
+
+    public function funGenerarReportePDF(){
+
+        $proyectos = Proyecto::with('jefe_proyecto_data')->get();
+        
+
+        $pdf = Pdf::loadView('pdf.proyectos', compact('proyectos'));
+        return $pdf->stream('proyectos.pdf');
+
+    }
+    
+    public function funGenerarReporteProyectoPDF($id){
+        $proyecto = Proyecto::with(['jefe_proyecto_data', 'tareas', 'recursos', 'informes'])->find($id);
+
+        $pdf = Pdf::loadView('pdf.proyecto', compact('proyecto'));
+        return $pdf->stream("proyecto-$proyecto->id.pdf");
+    }
+
+    public function funGenerarArchivoExcel(){
+        return Excel::download(new ProyectosExport, 'proyectos.xlsx');
     }
 }

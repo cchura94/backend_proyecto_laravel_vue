@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Proyecto extends Model
 {
-    public function jefe_proyecto() {
+    public function jefe_proyecto_data() {
         return $this->belongsTo(User::class, "jefe_proyecto");
     }
 

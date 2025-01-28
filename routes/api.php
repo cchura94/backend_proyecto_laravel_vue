@@ -26,13 +26,31 @@ Route::prefix('/v1/auth')->group(function(){
 
 });
 
-Route::post("proyecto/{id}/asignar-informe", [ProyectoController::class, "asignarInforme"]);
 
-Route::post("tarea/{id}/asignar-usuario", [TareaController::class, "asignarUsuario"]);
-Route::post("proyecto/{id}/asignar-recurso", [ProyectoController::class, "asignarRecurso"]);
-// CRUD de Usuarios
-Route::apiResource("user", UsuarioController::class);
-Route::apiResource("persona", PersonaController::class);
-Route::apiResource("proyecto", ProyectoController::class);
-Route::apiResource("tarea", TareaController::class);
-Route::apiResource("recurso", RecursoController::class);
+Route::middleware('auth:sanctum')->group(function(){
+    // cambios de estado tarea
+    
+    Route::post("tarea/{id}/actualizar-estado", [TareaController::class, "actualizarEstado"]);
+    // generar reporte PDF
+    Route::get("proyecto/reportes/pdf", [ProyectoController::class, "funGenerarReportePDF"]);
+    Route::get("proyecto/{id}/reportes/pdf", [ProyectoController::class, "funGenerarReporteProyectoPDF"]);
+    
+    // reporte Excel
+    Route:: get("proyecto/reportes/excel", [ProyectoController::class, "funGenerarArchivoExcel"]);
+    
+
+    Route::post("proyecto/{id}/asignar-informe", [ProyectoController::class, "asignarInforme"]);
+
+    Route::post("tarea/{id}/asignar-usuario", [TareaController::class, "asignarUsuario"]);
+    Route::post("proyecto/{id}/asignar-recurso", [ProyectoController::class, "asignarRecurso"]);
+    // CRUD de Usuarios
+    Route::apiResource("user", UsuarioController::class);
+    Route::apiResource("persona", PersonaController::class);
+    Route::apiResource("proyecto", ProyectoController::class);
+    Route::apiResource("tarea", TareaController::class);
+    Route::apiResource("recurso", RecursoController::class);
+});
+
+Route::get("/no-autorizado", function(){
+    return response()->json(["message" => "No tiene permisos"]);
+})->name("login");

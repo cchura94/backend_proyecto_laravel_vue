@@ -52,10 +52,16 @@ class AuthController extends Controller
     }
 
     public function funProfile(Request $request){
-        return response()->json($request->user(), 200);
+
+        $usuario = $request->user()->load(['persona', 'tareas', 'proyectos']);
+        return response()->json($usuario, 200);
     }
 
     public function funLogout(Request $request){
 
+        $usuario = $request->user();
+        $usuario->tokens()->delete();
+
+        return response()->json(["mensaje" => "LOGOUT"]);
     }
 }
